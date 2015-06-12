@@ -5,8 +5,12 @@
 	java.sql.ResultSet,
 	java.sql.SQLException,
 	java.sql.Connection,
-	javax.servlet.http.HttpServletResponse'%>
-<% ConexionBDMysql conSesionBD=new ConexionBDMysql(); %>    
+	javax.servlet.http.HttpServletResponse,
+	javax.servlet.http.HttpServletRequest'%>
+<%!
+	ConexionBDMysql conSesionBD = new ConexionBDMysql();
+%>
+
 <!DOCTYPE html PUBLIC>
 <html>
 <head>
@@ -63,7 +67,7 @@
 		</td></tr> 
 				
 		<tr>
-		<td>
+		<td> 	
 		<label for="txtPassword">
 			Contraseña
 		</label></td>
@@ -72,9 +76,16 @@
 		</td>
 		</tr>
 		</table>
-		<button onCLick = "crearConexion()">Acceder</button>
-	</form>
+		<input type="submit" id="btnSubmit" name="btnSubmit" value="Enviar"/>
+	</form>	
+	</div>
+	</section>
+	<div id="footer">ESCOM, 2015</div>
+	</body>
+	
 	<%
+	if(request.getParameter("btnSubmit")!=null) //btnSubmit is the name of your button, not id of that button.
+	{
 		String datoscon[] = new String[2];
 		datoscon[0] = request.getParameter("txtUsuario");
 		datoscon[1] = request.getParameter("txtPassword");
@@ -87,16 +98,22 @@
 		HttpSession sesion = request.getSession();
 		
 		sesion.setAttribute("conexionMysql", conSesionBD);
-		response.sendRedirect("consultas.html");
+		try{
+			response.sendRedirect("consultas.html");
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		}
 		else{ 
-		response.setContentType("text/html");		
-		response.getWriter().println("<h1>Datos incorrectos</h1><br/>"
-				+ "<a href='index.jsp'>Regresar</a>");
-		}	
+		response.setContentType("text/html");
+		try{
+			response.getWriter().println("<h1>Datos incorrectos</h1><br/>"
+					+ "<a href='index.jsp'>Regresar</a>");
+		}catch (Exception e){
+			e.printStackTrace();
+			}
+		}
+	}
+
 	%>
-	</div>
-	</section>
-	<div id="footer">ESCOM, 2015</div>
-	</body>
 </html>
